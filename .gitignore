@@ -130,7 +130,6 @@ ENV/
 Images/
 Movies/
 Data/
-figures/
 map/include/
 map/figures/
 folium/include/
