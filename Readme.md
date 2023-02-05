@@ -3,7 +3,7 @@
 pyPG is a simple library used to draw PERT and GANTT charts using matplotlib.
 The project information is stored in a simple MariaDB (MySQL) database.
 
-the library consist of one class Milestones and two functions PERT and GANTT that can be quite easily customized.
+the library consists of one class (Milestone) and two functions PERT and GANTT that can be quite easily customized.
 
 To use pyPG you need to have a working knowledge of MariaDB/MYSQL servers in order to input your project data into the base.
 
@@ -87,7 +87,7 @@ tid   | int(11)      | NO   | PRI | NULL    |       |
 
 ####  milestones
 
-Milestones are a bit more complex due to the necesity to include three dates, the estimated, the best (here min_t) and the worst (max_t).
+Milestones are a bit more complex due to the necessity to include three dates, the estimated, the best (here min_t) and the worst (max_t).
 
 | Field   | Type         | Null | Key | Default | Extra          |
 |---|---|---|---|---|---|
@@ -116,7 +116,7 @@ The mid field in this tables offers the possibility to correlate deliverables to
 
 #### correl
 
-this table is a bit particular as it established the links between milestones for the PERT diagrams.
+this table is a bit particular as it establishes the dependencies existing between milestones for the PERT diagrams.
 
 | Field   | Type         | Null | Key | Default | Extra          |
 |---|---|---|---|---|---|
