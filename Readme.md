@@ -5,7 +5,7 @@ The project information is stored in a simple MariaDB (MySQL) database.
 
 the library consist of one class Milestones and two functions PERT and GANTT that can be quite easily customized.
 
-To use pyPG you need to have a working knowledge of MariaDB/MYSQL servers.
+To use pyPG you need to have a working knowledge of MariaDB/MYSQL servers in order to input your project data into the base.
 
 
 ## Installation and usage
