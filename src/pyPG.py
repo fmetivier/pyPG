@@ -14,6 +14,7 @@ from dateutil.relativedelta import relativedelta
 import numpy as np
 
 from sqlalchemy import create_engine
+from eralchemy import render_er
 
 from copy import copy, deepcopy
 
@@ -38,8 +39,8 @@ class Milestone:
         ax,
         min_mid,
         wp_step,
-        mfcolor="C5",
-        mecolor="C0",
+        mfcolor="C0",
+        mecolor="C5",
     ):
         """initialization. stores the variables of the class
 
@@ -178,19 +179,28 @@ class Milestone:
         self.n_depends += 1
 
 
-def PERT(pid=1, db="myPERT", chart_size=(18, 10)):
+def PERT(
+    pid=1,
+    db="myPERT",
+    mylogin="root",
+    mypass="iznogod01",
+    chart_size=(18, 10),
+    oname="PERT.pdf",
+):
     """Draws a PERT chart using a Mariadb/mysql database and matplotlib
 
     :param  pid : project id in the database
     :param  db: name of the mysql database
+    :param mylogin: login for database access
+    :param mypass: pass database access
     :param  chart_size: figsize of the plt figure
+    :param oname: outpout filename and extension
 
     """
     ##################
     # base connection
     ##################
-    mylogin = "root"
-    mypass = "iznogod01"
+
     engine = create_engine("mysql://%s:%s@localhost/%s" % (mylogin, mypass, db))
     conn = engine.connect()
 
@@ -246,7 +256,7 @@ def PERT(pid=1, db="myPERT", chart_size=(18, 10)):
     for c in correl:
         milestones[c[0] - 1].depends_on(milestones[c[1] - 1].x, milestones[c[1] - 1].y)
 
-    sql = "select * from wp where pid = %i" % (pid)
+    sql = "select * from wps where pid = %i" % (pid)
     wplist = conn.execute(sql).fetchall()
     c = 0
     tn = []
@@ -281,31 +291,32 @@ def PERT(pid=1, db="myPERT", chart_size=(18, 10)):
     ax.spines["right"].set_visible(False)
     ax.spines["bottom"].set_visible(False)
 
-    plt.savefig("../figures/SHEWAM_PERT.svg", bbox_inches="tight")
+    plt.savefig(oname, bbox_inches="tight")
     plt.show()
 
 
-def GANTT(pid=1, db="myPERT"):
+def GANTT(pid=1, db="myPERT", mylogin="root", mypass="iznogod01", oname="GANTT.pdf"):
     """draws GANTT chart using a Mariadb/mysql database
 
-    :param pid
+    :param pid: project id
     :param db: name of Mariadb/mysql dbase
+    :param mylogin: login for database access
+    :param mypass: pass database access
+    :param oname: output filename and format
     """
 
     ##################
     # base connection
     ##################
-    mylogin = "root"
-    mypass = "iznogod01"
     engine = create_engine("mysql://%s:%s@localhost/%s" % (mylogin, mypass, db))
     conn = engine.connect()
 
     plen = 36
 
-    sql = "select count(distinct wpid) from wp where pid = %i" % (pid)
+    sql = "select count(distinct wpid) from wps where pid = %i" % (pid)
     n_wp = conn.execute(sql).fetchall()[0][0]
 
-    sql = "select count(tid) from task where pid = %i group by wid " % (pid)
+    sql = "select count(tid) from tasks where pid = %i group by wid " % (pid)
     res = conn.execute(sql).fetchall()
     n_t = 0
     for r in res:
@@ -334,7 +345,7 @@ def GANTT(pid=1, db="myPERT"):
         ax.append(fig.add_axes([x0, hwp + spacing, wtot, ht * res[i][0]]))
         hwp += ht * res[i][0] + spacing
 
-    sql = "select *  from wp where pid = %i" % (pid)
+    sql = "select *  from wps where pid = %i" % (pid)
     res_wp = conn.execute(sql).fetchall()
 
     ##########################
@@ -343,7 +354,7 @@ def GANTT(pid=1, db="myPERT"):
 
     # tasks
     for wp in res_wp:
-        sql = "select * from task where wid=%i and pid = %i" % (wp[0], pid)
+        sql = "select * from tasks where wid=%i and pid = %i" % (wp[0], pid)
         t_list = conn.execute(sql).fetchall()
         Task_collection = []
         tnames = []
@@ -529,7 +540,7 @@ def GANTT(pid=1, db="myPERT"):
         borderaxespad=0.0,
     )
 
-    plt.savefig("../figures/SHEWAM_GANTT.svg", bbox_inches="tight")
+    plt.savefig(oname, bbox_inches="tight")
     plt.show()
 
 
