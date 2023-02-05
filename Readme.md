@@ -3,13 +3,15 @@
 pyPG is a simple library used to draw PERT and GANTT charts using matplotlib.
 The project information is stored in a simple MariaDB (MySQL) database.
 
-the librar consist of one class Milestones and two functions PERT and GANTT that can be quite easily customized.
+the library consist of one class Milestones and two functions PERT and GANTT that can be quite easily customized.
+
+To use pyPG you need to have a working knowledge of MariaDB/MYSQL servers.
 
 
-## Installation
+## Installation and usage
 
 1 copy the python file wherever you want
-2 load the database structure provided in your MariaDB/MYSQL server using
+2 load the database structure provided in the src dir in your MariaDB/MYSQL server using
 
 ```bash
 mysql -u<user> -p<passwd> < myPERT.sql
@@ -19,17 +21,19 @@ than just run
 python  pyPG.py
 ```
 The resuting charts are stored by default in your src directory.
-The PERT chart could look like
+
+A sample project is included that produces the following charts.
+
 ![PERT](./figures/SHEWAM_PERT.svg)
 
-The corresponding GANTT chart should lool like
+
 ![GANTT](./figures/SHEWAM_GANTT.svg)
 
 
 You can also edit the python file and run it. Parameters are simple to modify according to your taste.
 
 
-## database structure:
+## Database structure:
 
 ### Introduction
  the database is organized in six tables, five of which are traditional and common to any research or education project.
@@ -53,7 +57,7 @@ Each table is relatively straightforward and simple, links are established using
 
 ### table defs
 
-he field names should be easy to catch hopefully. pyPG is not (yet) a project management software so the tables have been kept simple (for now).
+The field names should be easy to catch hopefully. pyPG is not (yet) a project management software so the tables have been kept simple (for now).
 
 #### projects
 | Field   | Type         | Null | Key | Default | Extra          |
